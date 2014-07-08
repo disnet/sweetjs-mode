@@ -78,7 +78,8 @@
 
 
 (defvar sweetjs-mode-keymap (make-sparse-keymap))
-(define-key sweetjs-mode-keymap (kbd "C-c C-c") 'sweetjs-compile-buffer)
+(define-key sweetjs-mode-keymap (kbd "C-c s c") 'sweetjs-compile-buffer)
+(define-key sweetjs-mode-keymap (kbd "C-c s r") 'sweetjs-compile-region)
 
 (defun sweetjs-compile-buffer ()
   (interactive)
@@ -87,7 +88,7 @@
 (define-minor-mode sweetjs-mode
   "Adds some sweetjs convenience functions to emacs"
   nil
-  "Sjs"
+  " Sjs"
   sweetjs-mode-keymap
   (if sweetjs-mode (sweetjs-turn-on) (sweetjs-turn-off)))
 
