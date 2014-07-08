@@ -32,34 +32,53 @@
   "A minor mode for sweet.js"
   :group 'languages)
 
+(defcustom sweetjs-command "sjs"
+  "The sweet.js binary used for compiling code. Must be in the path."
+  :type 'string
+  :group 'sweetjs)
+
+(defcustom sweetjs-compile-buffer "*sweetjs-compile*"
+  "The name of the scratch buffer."
+  :type 'string
+  :group 'sweetjs)
+
+(defvar sweetjs-keywords-regexp (regexp-opt
+                                 '("macro" "rule")
+                                 'words))
+
+(defvar sweetjs-font-lock-keywords
+  `((,sweetjs-keywords-regexp . font-lock-keyword-face)))
+
 (defun sweetjs-turn-on ()
   "Turn on sweetjs mode."
-  (message "it's on!"))
+  (font-lock-add-keywords nil sweetjs-font-lock-keywords))
 
 (defun sweetjs-turn-off ()
   "Turn off sweetjs mode."
-  (message "it's off!"))
+  (font-lock-remove-keywords nil sweetjs-font-lock-keywords))
 
 (defun sweetjs-compile-region (start end)
   "Compile the region."
   (interactive "r")
   (message "compiling")
 
-  (let ((buffer (get-buffer "*sweetjs-compiled*")))
+  (let ((buffer (get-buffer sweetjs-compile-buffer)))
     (when buffer
       (kill-buffer buffer)))
 
-  (apply (apply-partially 'call-process-region start end "sjs" nil
-                          (get-buffer-create "*sweetjs-compiled*")
+  (apply (apply-partially 'call-process-region start end sweetjs-command nil
+                          (get-buffer-create sweetjs-compile-buffer)
                           nil)
          (list "-s"))
 
-  (with-current-buffer "*sweetjs-compiled*"
+  (with-current-buffer sweetjs-compile-buffer
     (javascript-mode))
 
-  (display-buffer-other-frame "*sweetjs-compiled*")
+  (display-buffer-other-frame sweetjs-compile-buffer))
 
-  )
+
+(defvar sweetjs-mode-keymap (make-sparse-keymap))
+(define-key sweetjs-mode-keymap (kbd "C-c C-c") 'sweetjs-compile-buffer)
 
 (defun sweetjs-compile-buffer ()
   (interactive)
@@ -67,11 +86,10 @@
 
 (define-minor-mode sweetjs-mode
   "Adds some sweetjs convenience functions to emacs"
-  :lighter "Sjs"
-  (progn
-    (if sweetjs-mode
-        (sweetjs-turn-on)
-      (sweetjs-turn-off))))
+  nil
+  "Sjs"
+  sweetjs-mode-keymap
+  (if sweetjs-mode (sweetjs-turn-on) (sweetjs-turn-off)))
 
 
 (provide 'sweetjs-mode)
