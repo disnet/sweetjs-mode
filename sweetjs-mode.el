@@ -63,7 +63,7 @@
   :group 'sweetjs)
 
 (defvar sweetjs-keywords-regexp (regexp-opt
-                                 '("macro" "rule")
+                                 '("macro" "rule" "operator")
                                  'words))
 
 (defvar sweetjs-font-lock-keywords
