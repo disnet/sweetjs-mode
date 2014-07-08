@@ -26,6 +26,26 @@
 
 ;;; Commentary:
 
+;; Minor mode for sweetjs files. Adds some syntax highlighting and
+;; commands for compiling sweet.js files.
+;;
+;; Keybindings:
+;;
+;;    C-c s r  compile region
+;;    C-c s c  compile buffer
+;;
+
+;;; Installation:
+
+;; In your emacs config:
+
+;;      (add-to-list 'load-path "/path/to/sweetjs-mode")
+;;      (require 'sweetjs-mode)
+
+;; If you want to turn in on for all JavaScript files:
+
+;;      (add-hook 'js-mode 'sweetjs-mode)
+
 ;;; Code:
 
 (defgroup sweetjs nil
